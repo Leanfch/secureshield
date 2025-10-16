@@ -24,9 +24,9 @@ Route::middleware('auth')->group(function () {
 
 // Admin routes - protected by custom 'admin' middleware
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::resource('posts', App\Http\Controllers\Admin\AdminPostController::class);
+    Route::get('/users', [App\Http\Controllers\Admin\AdminUserController::class, 'index'])->name('users.index');
 });
 
 require __DIR__.'/auth.php';
