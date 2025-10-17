@@ -8,45 +8,47 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gradient-to-br from-blue-50 via-white to-blue-50">
-    <!-- Navigation -->
-    <nav class="bg-white/95 backdrop-blur-md shadow-lg fixed w-full z-50 border-b border-blue-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header with Navigation -->
+    <header class="bg-white/95 backdrop-blur-md shadow-lg fixed w-full z-50 border-b border-blue-100">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
             <div class="flex justify-between h-20">
                 <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="flex items-center group">
-                        <img src="{{ asset('assets/secureshield-logo-text.svg') }}" alt="SecureShield" class="h-12 transition-transform group-hover:scale-105">
+                    <a href="{{ route('home') }}" class="flex items-center group" aria-label="SecureShield Home">
+                        <img src="{{ asset('assets/secureshield-logo-text.svg') }}" alt="SecureShield Logo" class="h-12 transition-transform group-hover:scale-105">
                     </a>
                 </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ route('home') }}" class="text-blue-900 font-semibold border-b-2 border-blue-600 pb-1 transition">Inicio</a>
-                    <a href="{{ route('plans.index') }}" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-200">Planes</a>
-                    <a href="{{ route('blog.index') }}" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-200">Blog</a>
+                <ul class="hidden md:flex items-center space-x-8">
+                    <li><a href="{{ route('home') }}" class="text-blue-900 font-semibold border-b-2 border-blue-600 pb-1 transition" aria-current="page">Inicio</a></li>
+                    <li><a href="{{ route('plans.index') }}" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-200">Planes</a></li>
+                    <li><a href="{{ route('blog.index') }}" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-200">Blog</a></li>
                     @auth
-                        <a href="{{ route('dashboard') }}" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-200">Dashboard</a>
+                        <li><a href="{{ route('dashboard') }}" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-200">Dashboard</a></li>
                     @else
-                        <a href="{{ route('login') }}" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-200">Iniciar Sesión</a>
-                        <a href="{{ route('register') }}" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold">Registrarse</a>
+                        <li><a href="{{ route('login') }}" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-200">Iniciar Sesión</a></li>
+                        <li><a href="{{ route('register') }}" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold">Registrarse</a></li>
                     @endauth
-                </div>
+                </ul>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section class="relative pt-32 pb-24 px-4 overflow-hidden">
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="relative pt-32 pb-24 px-4 overflow-hidden" aria-labelledby="hero-heading">
         <!-- Animated Background -->
         <div class="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 -z-10"></div>
         <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyNTYzZWIiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6bTAtMjBjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-10 -z-10"></div>
 
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div class="text-white">
-                    <div class="inline-block mb-6">
+                <article class="text-white">
+                    <p class="inline-block mb-6">
                         <span class="bg-blue-500/20 text-blue-200 px-4 py-2 rounded-full text-sm font-semibold backdrop-blur-sm border border-blue-400/30">
                             🛡️ Protección Certificada 2025
                         </span>
-                    </div>
-                    <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+                    </p>
+                    <h1 id="hero-heading" class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
                         Protección <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-200">Total</span> Para Tu Mundo Digital
                     </h1>
                     <p class="text-xl md:text-2xl mb-10 text-blue-100 leading-relaxed">
@@ -67,41 +69,41 @@
                     </div>
 
                     <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-6 mt-12 pt-12 border-t border-blue-700/50">
+                    <aside class="grid grid-cols-3 gap-6 mt-12 pt-12 border-t border-blue-700/50" aria-label="Estadísticas clave">
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-white mb-1">10M+</div>
-                            <div class="text-sm text-blue-200">Usuarios Activos</div>
+                            <data value="10000000" class="text-3xl font-bold text-white mb-1">10M+</data>
+                            <p class="text-sm text-blue-200">Usuarios Activos</p>
                         </div>
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-white mb-1">99.9%</div>
-                            <div class="text-sm text-blue-200">Detección</div>
+                            <data value="99.9" class="text-3xl font-bold text-white mb-1">99.9%</data>
+                            <p class="text-sm text-blue-200">Detección</p>
                         </div>
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-white mb-1">24/7</div>
-                            <div class="text-sm text-blue-200">Soporte</div>
+                            <data value="24" class="text-3xl font-bold text-white mb-1">24/7</data>
+                            <p class="text-sm text-blue-200">Soporte</p>
                         </div>
-                    </div>
-                </div>
-                <div class="flex justify-center relative">
-                    <div class="absolute inset-0 bg-blue-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-                    <img src="{{ asset('assets/secureshield-logo.svg') }}" alt="SecureShield Logo" class="relative w-64 h-64 md:w-80 md:h-80 drop-shadow-2xl animate-float">
-                </div>
+                    </aside>
+                </article>
+                <figure class="flex justify-center relative">
+                    <div class="absolute inset-0 bg-blue-500 rounded-full blur-3xl opacity-20 animate-pulse" aria-hidden="true"></div>
+                    <img src="{{ asset('assets/secureshield-logo.svg') }}" alt="Logotipo de SecureShield - Escudo de protección con candado" class="relative w-64 h-64 md:w-80 md:h-80 drop-shadow-2xl animate-float">
+                </figure>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="py-24 px-4 bg-gradient-to-b from-white to-blue-50">
+    <section class="py-24 px-4 bg-gradient-to-b from-white to-blue-50" aria-labelledby="features-heading">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20">
+            <header class="text-center mb-20">
                 <span class="text-blue-600 font-semibold text-sm uppercase tracking-wider mb-4 block">Características Premium</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">¿Por qué elegir <span class="text-blue-600">SecureShield</span>?</h2>
+                <h2 id="features-heading" class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">¿Por qué elegir <span class="text-blue-600">SecureShield</span>?</h2>
                 <p class="text-xl text-slate-600 max-w-2xl mx-auto">Protección completa para todos tus dispositivos con tecnología de última generación</p>
-            </div>
+            </header>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Feature 1 -->
-                <div class="group bg-white p-8 rounded-2xl hover:shadow-2xl transition-all duration-300 border-2 border-blue-100 hover:border-blue-300 transform hover:-translate-y-2">
+                <article class="group bg-white p-8 rounded-2xl hover:shadow-2xl transition-all duration-300 border-2 border-blue-100 hover:border-blue-300 transform hover:-translate-y-2">
                     <div class="bg-gradient-to-br from-blue-600 to-blue-700 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/50">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>

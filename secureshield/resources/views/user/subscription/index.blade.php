@@ -20,6 +20,39 @@
                 </div>
             @endif
 
+            @if(session('info'))
+                <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
+                    {{ session('info') }}
+                </div>
+            @endif
+
+            <!-- Pending Payment Sync Banner -->
+            @if($hasPendingSync)
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-lg shadow-md">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4 flex-1">
+                            <h3 class="text-lg font-bold text-yellow-800">¿Completaste un pago recientemente?</h3>
+                            <p class="mt-2 text-sm text-yellow-700">
+                                Detectamos que tienes pagos pendientes de activación. Si acabas de realizar un pago con MercadoPago, haz clic en el botón para activar tu suscripción.
+                            </p>
+                            <div class="mt-4">
+                                <a href="{{ route('payment.force-approve') }}" class="inline-flex items-center px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-bold rounded-lg shadow transition">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                    Activar mi Suscripción
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <!-- Current Subscription -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
@@ -119,7 +152,7 @@
                         </div>
                     @else
                         <div class="text-center py-12 bg-gray-50 rounded-lg">
-                            <svg class="w-24 h-24 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                             <h3 class="text-2xl font-bold text-gray-900 mb-2">No tienes una suscripción activa</h3>
@@ -136,36 +169,50 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     <h3 class="text-2xl font-bold text-gray-900 mb-6">Cambiar de Plan</h3>
+                    <p class="text-gray-600 mb-6">Selecciona un plan y procede al pago seguro con MercadoPago</p>
 
-                    <form action="{{ route('user.subscription.change') }}" method="POST">
-                        @csrf
-                        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            @foreach($allPlans as $plan)
-                            <label class="cursor-pointer">
-                                <input type="radio" name="plan_id" value="{{ $plan->id }}" class="hidden peer"
-                                    {{ $activeSubscription && $activeSubscription->plan_id === $plan->id ? 'disabled' : '' }}>
-                                <div class="border-2 rounded-lg p-4 peer-checked:border-blue-600 peer-checked:bg-blue-50
-                                    {{ $activeSubscription && $activeSubscription->plan_id === $plan->id ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-300' }}">
-                                    <h4 class="text-xl font-bold text-gray-900 mb-2">{{ $plan->name }}</h4>
-                                    <p class="text-3xl font-bold text-blue-600 mb-2">${{ number_format($plan->price, 0, ',', '.') }}</p>
-                                    <p class="text-sm text-gray-600 mb-3">{{ Str::limit($plan->description, 50) }}</p>
-                                    @if($activeSubscription && $activeSubscription->plan_id === $plan->id)
-                                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-bold">Plan Actual</span>
-                                    @endif
-                                </div>
-                            </label>
-                            @endforeach
-                        </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        @foreach($allPlans as $plan)
+                        <div class="border-2 rounded-lg p-4 {{ $activeSubscription && $activeSubscription->plan_id === $plan->id ? 'opacity-50 border-green-500 bg-green-50' : 'hover:border-blue-300' }}">
+                            <h4 class="text-xl font-bold text-gray-900 mb-2">{{ $plan->name }}</h4>
+                            <p class="text-3xl font-bold text-blue-600 mb-2">${{ number_format($plan->price, 0, ',', '.') }}</p>
+                            <p class="text-sm text-gray-600 mb-4">{{ Str::limit($plan->description, 50) }}</p>
 
-                        <div class="mt-6">
-                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg">
-                                Cambiar Plan
-                            </button>
-                            <p class="text-sm text-gray-600 mt-2">
-                                * El cambio de plan será efectivo inmediatamente. Tu plan actual será cancelado y se activará el nuevo plan.
-                            </p>
+                            @if($activeSubscription && $activeSubscription->plan_id === $plan->id)
+                                <span class="block text-center text-xs bg-green-500 text-white px-2 py-2 rounded-lg font-bold">
+                                    ✓ Plan Actual
+                                </span>
+                            @else
+                                <form action="{{ route('payment.create') }}" method="POST" class="w-full">
+                                    @csrf
+                                    <input type="hidden" name="plan_id" value="{{ $plan->id }}">
+                                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">
+                                        @if($plan->price == 0)
+                                            Activar Gratis
+                                        @else
+                                            Contratar
+                                        @endif
+                                    </button>
+                                </form>
+                            @endif
                         </div>
-                    </form>
+                        @endforeach
+                    </div>
+
+                    <div class="mt-6 bg-blue-50 border-l-4 border-blue-500 p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700">
+                                    <strong>Nota:</strong> Al contratar un nuevo plan, tu suscripción actual será cancelada automáticamente y se activará el nuevo plan inmediatamente después del pago.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -192,7 +239,7 @@
                                         {{ $payment->created_at->format('d/m/Y H:i') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{ $payment->subscription->plan->name }}
+                                        {{ $payment->subscription && $payment->subscription->plan ? $payment->subscription->plan->name : $payment->description }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
                                         ${{ number_format($payment->amount, 0, ',', '.') }}

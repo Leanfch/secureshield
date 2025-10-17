@@ -29,7 +29,12 @@ class UserSubscriptionController extends Controller
         $subscriptionHistory = $user->subscriptions()->with('plan')->orderBy('created_at', 'desc')->get();
         $payments = $user->payments()->with('subscription.plan')->orderBy('created_at', 'desc')->get();
 
-        return view('user.subscription.index', compact('activeSubscription', 'allPlans', 'subscriptionHistory', 'payments'));
+        // Check if there are pending payments that need synchronization
+        $hasPendingSync = \App\Models\Payment::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->exists();
+
+        return view('user.subscription.index', compact('activeSubscription', 'allPlans', 'subscriptionHistory', 'payments', 'hasPendingSync'));
     }
 
     /**

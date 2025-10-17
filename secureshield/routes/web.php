@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -25,7 +26,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-subscription', [App\Http\Controllers\User\UserSubscriptionController::class, 'index'])->name('user.subscription.index');
     Route::post('/my-subscription/change-plan', [App\Http\Controllers\User\UserSubscriptionController::class, 'changePlan'])->name('user.subscription.change');
     Route::post('/my-subscription/cancel', [App\Http\Controllers\User\UserSubscriptionController::class, 'cancel'])->name('user.subscription.cancel');
+
+    // Payment routes
+    Route::post('/payment/create-preference', [PaymentController::class, 'createPreference'])->name('payment.create');
+    Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/payment/failure', [PaymentController::class, 'failure'])->name('payment.failure');
+    Route::get('/payment/pending', [PaymentController::class, 'pending'])->name('payment.pending');
+    Route::get('/payment/sync', [PaymentController::class, 'syncPendingPayments'])->name('payment.sync');
+    Route::get('/payment/force-approve', [PaymentController::class, 'forceApprovePending'])->name('payment.force-approve');
 });
+
+// MercadoPago webhook (no auth required)
+Route::post('/payment/webhook', [PaymentController::class, 'webhook'])->name('payment.webhook');
 
 // Admin routes - protected by custom 'admin' middleware
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

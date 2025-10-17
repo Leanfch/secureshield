@@ -51,6 +51,29 @@
     <!-- Plans Section -->
     <section class="py-20 px-4 -mt-8">
         <div class="max-w-7xl mx-auto">
+            <!-- Success/Error Messages -->
+            @if(session('success'))
+            <div class="mb-8 bg-green-50 border-2 border-green-500 text-green-900 px-6 py-4 rounded-xl shadow-lg">
+                <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="font-semibold">{{ session('success') }}</p>
+                </div>
+            </div>
+            @endif
+
+            @if(session('error'))
+            <div class="mb-8 bg-red-50 border-2 border-red-500 text-red-900 px-6 py-4 rounded-xl shadow-lg">
+                <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="font-semibold">{{ session('error') }}</p>
+                </div>
+            </div>
+            @endif
+
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 @foreach($plans as $plan)
                 <div class="group relative bg-white rounded-3xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300 {{ $plan->name === 'Premium' ? 'ring-4 ring-blue-500 shadow-2xl shadow-blue-500/50' : 'border-2 border-blue-100' }}">
@@ -162,9 +185,28 @@
 
                         <!-- CTA Button -->
                         @auth
-                            <a href="#" class="block w-full text-center {{ $plan->name === 'Premium' ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-xl shadow-blue-500/30' : 'bg-slate-900 hover:bg-slate-800' }} text-white font-bold py-4 rounded-xl transition-all duration-200 transform hover:-translate-y-1 hover:shadow-2xl">
-                                Contratar Ahora
-                            </a>
+                            @php
+                                $userActiveSubscription = Auth::user()->activeSubscription;
+                                $isCurrentPlan = $userActiveSubscription && $userActiveSubscription->plan_id === $plan->id;
+                            @endphp
+
+                            @if($isCurrentPlan)
+                                <button disabled class="block w-full text-center bg-gray-400 text-white font-bold py-4 rounded-xl cursor-not-allowed">
+                                    Plan Actual
+                                </button>
+                            @else
+                                <form action="{{ route('payment.create') }}" method="POST" class="w-full">
+                                    @csrf
+                                    <input type="hidden" name="plan_id" value="{{ $plan->id }}">
+                                    <button type="submit" class="block w-full text-center {{ $plan->name === 'Premium' ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-xl shadow-blue-500/30' : 'bg-slate-900 hover:bg-slate-800' }} text-white font-bold py-4 rounded-xl transition-all duration-200 transform hover:-translate-y-1 hover:shadow-2xl">
+                                        @if($plan->price == 0)
+                                            Activar Plan Gratis
+                                        @else
+                                            Contratar Ahora
+                                        @endif
+                                    </button>
+                                </form>
+                            @endif
                         @else
                             <a href="{{ route('register') }}" class="block w-full text-center {{ $plan->name === 'Premium' ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-xl shadow-blue-500/30' : 'bg-slate-900 hover:bg-slate-800' }} text-white font-bold py-4 rounded-xl transition-all duration-200 transform hover:-translate-y-1 hover:shadow-2xl">
                                 Comenzar Ahora
