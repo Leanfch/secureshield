@@ -9,7 +9,9 @@
       "Bash(powershell.exe -Command \"php C:\\xampp\\php\\composer.phar create-project laravel/laravel secureshield\")",
       "Bash(cp:*)",
       "Bash(npm run build:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(if exist check_users.php del check_users.php)",
+      "Bash(powershell.exe -Command \"if (Test-Path check_users.php) { Remove-Item check_users.php }\")"
     ],
     "deny": [],
     "ask": []
