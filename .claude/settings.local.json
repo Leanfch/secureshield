@@ -11,7 +11,9 @@
       "Bash(npm run build:*)",
       "Bash(npm run dev:*)",
       "Bash(if exist check_users.php del check_users.php)",
-      "Bash(powershell.exe -Command \"if (Test-Path check_users.php) { Remove-Item check_users.php }\")"
+      "Bash(powershell.exe -Command \"if (Test-Path check_users.php) { Remove-Item check_users.php }\")",
+      "Bash(powershell.exe -Command \"Get-ChildItem -Directory | Select-Object Name\")",
+      "Bash(powershell.exe -Command \"Get-ChildItem -File | Select-Object Name\")"
     ],
     "deny": [],
     "ask": []

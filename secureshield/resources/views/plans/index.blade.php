@@ -47,8 +47,8 @@
                 @foreach($plans as $plan)
                 <div class="group relative bg-white rounded-3xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300 {{ $plan->name === 'Premium' ? 'ring-4 ring-blue-500 shadow-2xl shadow-blue-500/50' : 'border-2 border-blue-100' }}">
                     @if($plan->name === 'Premium')
-                    <div class="absolute top-0 right-0 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-2 rounded-bl-2xl font-bold text-sm shadow-lg">
-                        ⭐ MÁS POPULAR
+                    <div class="absolute top-0 right-0 bg-gradient-to-r from-yellow-500 to-orange-600 text-white px-6 py-2 rounded-bl-2xl font-bold text-sm shadow-lg">
+                        MÁS POPULAR ⭐
                     </div>
                     @endif
 

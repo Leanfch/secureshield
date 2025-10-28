@@ -43,7 +43,7 @@
                 <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="w-full h-auto">
             </div>
             @else
-            <div class="mb-8 h-96 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center shadow-2xl">
+            <div class="h-96 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center">
                 <svg class="w-24 h-24 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
@@ -52,7 +52,7 @@
 
             <!-- Content -->
             <div class="prose prose-lg max-w-none">
-                <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+                <div class="p-2 md:p-8">
                     <div class="text-gray-800 text-lg leading-relaxed whitespace-pre-line">
                         {{ $post->content }}
                     </div>
